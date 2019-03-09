@@ -10,8 +10,8 @@
     <TH>User Status</TH>
 </TR>
 <?php
-    //Connect to database
-    require('connectDB.php');
+//Connect to database
+require('connectDB.php');
 
 $sql = "SELECT * FROM logs WHERE DateLog=CURDATE() ORDER BY id DESC";
 $result=mysqli_query($conn,$sql);

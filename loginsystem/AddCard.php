@@ -1,153 +1,5 @@
-<?php
+<?php  
 session_start();
-
-    //Connect to database
-    require('connectDB.php');
-//**********************************************************************************************
-//**********************************************************************************************
-  if (empty($Cid)) 
-  {
-    $result = $conn->query("SELECT CardID FROM users WHERE username='' ");
-  if ( $result->num_rows > 0 )
-      { 
-        $row=$result->fetch_assoc();
-        $Cid= $row['CardID'];
-        $_SESSION[ 'card' ] = $row['CardID'];
-        $_SESSION[ 'alert' ] = "<img src='image/al.png' style='margin-right: 20px' width='30'>There's an available cards. ";
-        $_SESSION[ 'message' ] ="";
-      }
-  else{
-        $_SESSION[ 'alert' ] = "<img src='image/al.png' style='margin-right: 20px' width='30'>There's no available cards. ";
-        $Cid= "";
-        $_SESSION[ 'message' ] ="No thing";
-      }
-  }
-//**********************************************************************************************
-//**********************************************************************************************
-	if ($_SERVER["REQUEST_METHOD"] == "POST")
-{
-	if(isset($_POST['login']) && !empty($_SESSION[ 'card' ]) && !empty($Cid)) 
-  {
-		    $CardID = $_SESSION[ 'card' ];
-        //define other variables with submitted values from $_POST
-        $Uname = $conn->escape_string($_POST['Uname']);
-        $Number = $conn->escape_string($_POST['Number']);
-        $gender= $conn->escape_string($_POST['gender']);
-                            
-  $result = $conn->query("SELECT * FROM users WHERE SerialNumber='$Number' ");
-       if ( $result->num_rows > 0 )
-          { 
-           $_SESSION[ 'message' ] = "The Number already taken!";
-          }
-         else 
-         {  
-
-  $sqll = "UPDATE users SET username='$Uname',SerialNumber='$Number' ,gender='$gender' WHERE CardID='$CardID'";
-
-          if ($conn->query($sqll) === true){
-               $_SESSION[ 'message' ] = "<img src='image/add.png' style='margin-right: 20px' width='30'>Registration succesful. ";
-               $Cid ="";
-               $_SESSION[ 'card' ] = "";
-               }
-          else {
-               $_SESSION[ 'message' ] = "Registration failed!";
-               } 
-    	   }
-	}
-//**********************************************************************************************  
-//**********************************************************************************************  
-  if (isset($_POST['update']) && !empty($_SESSION[ 'card' ])) 
-    {
-        $CardID = $_SESSION[ 'card' ];
-        //define other variables with submitted values from $_POST
-        $Uname = $conn->escape_string($_POST['Uname']);
-        $Number = $conn->escape_string($_POST['Number']);
-        $gender= $conn->escape_string($_POST['gender']);
-      
-      $result = $conn->query("SELECT * FROM users WHERE CardID='$CardID'");
-       if ( $result->num_rows > 0 )
-          { 
-          $row=$result->fetch_assoc();
-
-          if (empty($row['username'])) 
-            {
-            $_SESSION[ 'message' ] = "<img src='image/add.png' style='margin-right: 20px' width='30'>Add the card first!";
-            }
-
-          else 
-            {
-              $result = $conn->query("SELECT * FROM users WHERE SerialNumber='$Number' And NOT username='$Uname'");
-
-              if ( $result->num_rows > 0 )
-                  { 
-                   $_SESSION[ 'message' ] = "The Number already taken!";
-                  }
-              else
-                  {
-
-          $sqll = "UPDATE users SET username='$Uname',SerialNumber='$Number' ,gender='$gender' WHERE CardID='$CardID'";
-
-                if ($conn->query($sqll) === true)
-                    {
-                         $_SESSION[ 'message' ] = "<img src='image/up.png' style='margin-right: 20px' width='25'>Updated succesfully. ";
-                     $Cid ="";
-                    $_SESSION[ 'card' ] = "";
-                    }
-                else
-                    {
-                    $_SESSION[ 'message' ] = "Updated failed!";
-                     } 
-                  }           
-               }
-            }  
-    }
-//**********************************************************************************************  
-//**********************************************************************************************
-  if(isset($_POST['del'])) 
-   {
-    $id = $_POST['CardID'];
-
-    $sqll = $conn->query("SELECT * FROM users WHERE CardID='$id'");
-          if ($sqll->num_rows > 0)
-              {
-            $sql ="DELETE FROM users WHERE CardID='$id'";
-
-              if ($conn->query($sql) === true)
-                  {
-                  $_SESSION[ 'message' ] = "<img src='image/che.png' style='margin-right: 20px' width='30'>The card deleted. ";
-                  $Cid =""; 
-                   }
-              else
-                 {
-                   $_SESSION[ 'message' ] = "The card didn't delete!";
-                  }
-              }
-          else
-              {
-                $_SESSION[ 'message' ] = "Select an existed card to deleted it.";
-              }    
-    }
-//**********************************************************************************************
-//**********************************************************************************************
-    if(isset($_POST['set'])) 
-    {
-    $Cid = $_POST['CardID'];
-
-    $sqll = $conn->query("SELECT CardID FROM users WHERE CardID='$Cid'");
-          if ($sqll->num_rows > 0)
-               {
-               $_SESSION[ 'message' ] = "Set the Card ID to $Cid to Update.";
-               $_SESSION[ 'card' ] = $Cid ;
-               }
-          else
-              {
-               $_SESSION[ 'message' ] = "Select an existed card to modified it.";
-               $Cid = "";
-              }     
-    }
-}
-//**********************************************************************************************
-//**********************************************************************************************
 ?>
 <!DOCTYPE html>
 <html>
@@ -155,15 +7,16 @@ session_start();
 <meta charset="utf-8">  
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Add a new User</title>
-<script src="https://code.jquery.com/jquery-3.3.1.js"
-        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-        crossorigin="anonymous">
-</script>
+<script src="js/jquery.min.js"></script>
 <script>
   $(document).ready(function(){
     setInterval(function(){
-      $("#User").load("add-users.php")
-    });
+      $.ajax({
+        url: "add-users.php"
+        }).done(function(data) {
+        $('#User').html(data);
+      });
+    },3000);
   });
 </script>
 <style type="text/css">
@@ -210,14 +63,13 @@ a:hover {opacity: 0.8;cursor: pointer;}
     </div>
     <a href="view.php">Users Logs</a>
   </header>
-<form action="" method="POST" >
+<form action="user_insert.php" method="POST" >
   <div class="bod">
 
   <div class="opt">
 	<table>
 		<tr>
-			<td>Card ID</td>
-			<td><?php echo $Cid ;?></td>
+      <input type="hidden" name="sel_cardID" value="<?php echo $_SESSION['card']; ?>">
 		</tr>
 		<tr>
 			<td>Name :</td>
@@ -225,7 +77,7 @@ a:hover {opacity: 0.8;cursor: pointer;}
 		</tr>
 		<tr>
 			<td>Number :</td>
-			<td><input type="text" placeholder="Serial Number" name="Number" required></td>
+			<td><input type="number" placeholder="Serial Number" name="Number"></td>
 		</tr>
 		<tr>
 			<td>Gender :</td>
@@ -241,22 +93,49 @@ a:hover {opacity: 0.8;cursor: pointer;}
 </form>
 
 <div class="car">
-    <?php echo '<label style="color:green;"> '.$_SESSION[ "message" ].'</label><br><br>';
-          echo '<label style="color:red"> '.$_SESSION[ "alert" ].'</label>'; 
-    ?> 
+  <?php 
+    if (isset($_GET['error'])) {
+      if ($_GET['error'] == "SQL_Error") {
+         echo '<label style="color:red">SQL Error!</label>'; 
+      }
+      else if ($_GET['error'] == "Nu_Exist") {
+         echo '<label style="color:red">The Number is already taken!</label>'; 
+      }
+      else if ($_GET['error'] == "No_SelID") {
+         echo '<label style="color:red">There is no selecting card!</label>'; 
+      }
+      else if ($_GET['error'] == "No_ExID") {
+         echo '<label style="color:red">This card does not exist!</label>'; 
+      }
+    }
+    else if (isset($_GET['success'])) {
+      if ($_GET['success'] == "registerd") {
+        echo '<label style="color:green;">The Card has been added</label><br><br>';
+      }
+      else if ($_GET['success'] == "Updated") {
+        echo '<label style="color:green;">The Card has been Updated</label><br><br>';
+      }
+      else if ($_GET['success'] == "deleted") {
+        echo '<label style="color:green;">The Card has been Deleted</label><br><br>';
+      }
+      else if ($_GET['success'] == "Selected") {
+        echo '<label style="color:green;">The Card has been selected</label><br><br>';
+      }
+    }
+  ?> 
 </div>
 <div class="op">
   
-  <form method="POST" action="">
+  <form method="POST" action="user_insert.php">
     <label style="font-size:19px;">Options:</label>
       <input type="text" name="CardID" placeholder="Card ID"><br>
       <button type="submit" name="del" style="border:none;background: none;" title="Remove"><img src="image/del.png" width="25" ></button>
       <button type="submit" name="set" style="border:none;background: none;" title="Select"><img src="image/set.png" width="30" ></button>
   </form>  
 </div>
-<img src="image/wi.png" style="float: right;width:200px;margin:-220px 50px 0px 0px">
-<a href="https://www.youtube.com/ElectronicsTechHaIs"><img src="image/icon.png" style="float: right;margin:-50px 30px 0px 0px"></a>
 </div>
+<img src="image/wi.png" style="float: right;width:200px;right:2%;top:100px;position: absolute;">
+<a href="https://www.youtube.com/ElectronicsTechHaIs"><img src="image/icon.png" style="float: right;right:8%;top:300px;position: absolute;"></a>
 <div id="User">
   
 </div>

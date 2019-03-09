@@ -113,33 +113,160 @@ if(!empty($_GET['CardID'])){
             //*****************************************************
             //An available card has been detected
             else{
-                echo "An_available_card";
-                exit();
+                $sql = "SELECT CardID_select FROM users WHERE CardID_select=?";
+                $result = mysqli_stmt_init($conn);
+                if (!mysqli_stmt_prepare($result, $sql)) {
+                    echo "SQL_Error_Select";
+                    exit();
+                }
+                else{
+                    $card_sel = 1;
+                    mysqli_stmt_bind_param($result, "i", $card_sel);
+                    mysqli_stmt_execute($result);
+                    $resultl = mysqli_stmt_get_result($result);
+                    if ($row = mysqli_fetch_assoc($resultl)) {
+                        $sql="UPDATE users SET CardID_select =?";
+                        $result = mysqli_stmt_init($conn);
+                        if (!mysqli_stmt_prepare($result, $sql)) {
+                            echo "SQL_Error_insert";
+                            exit();
+                        }
+                        else{
+                            $card_sel = 0;
+                            mysqli_stmt_bind_param($result, "i", $card_sel);
+                            mysqli_stmt_execute($result);
+                            $resultl = mysqli_stmt_get_result($result);
+                            if (!mysqli_stmt_prepare($result, $sql)){
+                                echo "SQL_Error_insert";
+                                exit();
+                            }
+                            else{
+                                $sql="UPDATE users SET CardID_select =? WHERE CardID=?";
+                                $result = mysqli_stmt_init($conn);
+                                if (!mysqli_stmt_prepare($result, $sql)) {
+                                    echo "SQL_Error_insert_An_available_card";
+                                    exit();
+                                }
+                                else{
+                                    $card_sel = 1;
+                                    mysqli_stmt_bind_param($result, "is", $card_sel, $Card);
+                                    mysqli_stmt_execute($result);
+                                    $resultl = mysqli_stmt_get_result($result);
+                                    if (!mysqli_stmt_prepare($result, $sql)){
+                                        echo "SQL_Error_insert_An_available_card2";
+                                        exit();
+                                    }
+                                    else{
+                                        echo "Cardavailable";
+                                        exit();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        $sql="UPDATE users SET CardID_select =? WHERE CardID=?";
+                        $result = mysqli_stmt_init($conn);
+                        if (!mysqli_stmt_prepare($result, $sql)) {
+                            echo "SQL_Error_insert_An_available_card";
+                            exit();
+                        }
+                        else{
+                            $card_sel = 1;
+                            mysqli_stmt_bind_param($result, "is", $card_sel, $Card);
+                            mysqli_stmt_execute($result);
+                            $resultl = mysqli_stmt_get_result($result);
+                            if (!mysqli_stmt_prepare($result, $sql)){
+                                echo "SQL_Error_insert_An_available_card2";
+                                exit();
+                            }
+                            else{
+                                echo "Cardavailable";
+                                exit();
+                            }
+                        }
+                    }
+                } 
             }
         }
         //*****************************************************
         //New card has been added
         else{
-            $sql = "INSERT INTO users (CardID) VALUES (?)";
+            $sql = "SELECT CardID_select FROM users WHERE CardID_select=?";
             $result = mysqli_stmt_init($conn);
             if (!mysqli_stmt_prepare($result, $sql)) {
-                echo "SQL_Error_Select_add";
+                echo "SQL_Error_Select";
                 exit();
             }
             else{
-                mysqli_stmt_bind_param($result, "s", $Card);
+                $card_sel = 1;
+                mysqli_stmt_bind_param($result, "i", $card_sel);
                 mysqli_stmt_execute($result);
                 $resultl = mysqli_stmt_get_result($result);
-                if (!mysqli_stmt_prepare($result, $sql)){
-                    echo "SQL_Error_insert_add";
-                    exit();
+                if ($row = mysqli_fetch_assoc($resultl)) {
+                    $sql="UPDATE users SET CardID_select =?";
+                    $result = mysqli_stmt_init($conn);
+                    if (!mysqli_stmt_prepare($result, $sql)) {
+                        echo "SQL_Error_insert";
+                        exit();
+                    }
+                    else{
+                        $card_sel = 0;
+                        mysqli_stmt_bind_param($result, "i", $card_sel);
+                        mysqli_stmt_execute($result);
+                        $resultl = mysqli_stmt_get_result($result);
+                        if (!mysqli_stmt_prepare($result, $sql)){
+                            echo "SQL_Error_insert";
+                            exit();
+                        }
+                        else{
+                            $sql = "INSERT INTO users (CardID, CardID_select) VALUES (?,?)";
+                            $result = mysqli_stmt_init($conn);
+                            if (!mysqli_stmt_prepare($result, $sql)) {
+                                echo "SQL_Error_Select_add";
+                                exit();
+                            }
+                            else{
+                                $card_sel = 1;
+                                mysqli_stmt_bind_param($result, "si", $Card, $card_sel);
+                                mysqli_stmt_execute($result);
+                                $resultl = mysqli_stmt_get_result($result);
+                                if (!mysqli_stmt_prepare($result, $sql)){
+                                    echo "SQL_Error_insert_add";
+                                    exit();
+                                }
+                                else{
+                                    echo "succesful";
+                                    exit();
+                                }
+                            }
+                        }
+                    }
                 }
                 else{
-                    echo "succesful_Card";
-                    exit();
+                    $sql = "INSERT INTO users (CardID, CardID_select) VALUES (?,?)";
+                    $result = mysqli_stmt_init($conn);
+                    if (!mysqli_stmt_prepare($result, $sql)) {
+                        echo "SQL_Error_Select_add";
+                        exit();
+                    }
+                    else{
+                        $card_sel = 1;
+                        mysqli_stmt_bind_param($result, "si", $Card, $card_sel);
+                        mysqli_stmt_execute($result);
+                        $resultl = mysqli_stmt_get_result($result);
+                        if (!mysqli_stmt_prepare($result, $sql)){
+                            echo "SQL_Error_insert_add";
+                            exit();
+                        }
+                        else{
+                            echo "succesful";
+                            exit();
+                        }
+                    }
                 }
-            }
-        }
+            } 
+        }    
     }
 }
 //***************************************************** 
