@@ -122,6 +122,9 @@ a:hover {opacity: 0.8;cursor: pointer;}
         echo '<label style="color:green;">The Card has been selected</label><br><br>';
       }
     }
+    else if (!isset($_SESSION['card'])) {
+      $_SESSION['card'] = "";
+    }
   ?> 
 </div>
 <div class="op">
