@@ -62,15 +62,9 @@ if(!empty($_GET['CardID'])){
                         else{
                             mysqli_stmt_bind_param($result, "ssds", $Card, $Uname, $Number, $UserStat);
                             mysqli_stmt_execute($result);
-                            $resultl = mysqli_stmt_get_result($result);
-                            if (!mysqli_stmt_prepare($result, $sql)){
-                                echo "SQL_Error_insert_login2";
-                                exit();
-                            }
-                            else{
-                                echo "login";
-                                exit();
-                            }
+
+                            echo "login";
+                            exit();
                         }
                     }
                     //*****************************************************
@@ -97,15 +91,9 @@ if(!empty($_GET['CardID'])){
                         else{
                             mysqli_stmt_bind_param($result, "sd", $UserStat, $Card);
                             mysqli_stmt_execute($result);
-                            $resultl = mysqli_stmt_get_result($result);
-                            if (!mysqli_stmt_prepare($result, $sql)){
-                                echo "SQL_Error_insert_logout2";
-                                exit();
-                            }
-                            else{
-                                echo "logout";
-                                exit();
-                            }
+
+                            echo "logout";
+                            exit();
                         }
                     }
                 }
@@ -124,7 +112,9 @@ if(!empty($_GET['CardID'])){
                     mysqli_stmt_bind_param($result, "i", $card_sel);
                     mysqli_stmt_execute($result);
                     $resultl = mysqli_stmt_get_result($result);
+                    
                     if ($row = mysqli_fetch_assoc($resultl)) {
+
                         $sql="UPDATE users SET CardID_select =?";
                         $result = mysqli_stmt_init($conn);
                         if (!mysqli_stmt_prepare($result, $sql)) {
@@ -135,32 +125,20 @@ if(!empty($_GET['CardID'])){
                             $card_sel = 0;
                             mysqli_stmt_bind_param($result, "i", $card_sel);
                             mysqli_stmt_execute($result);
-                            $resultl = mysqli_stmt_get_result($result);
-                            if (!mysqli_stmt_prepare($result, $sql)){
-                                echo "SQL_Error_insert";
+
+                            $sql="UPDATE users SET CardID_select =? WHERE CardID=?";
+                            $result = mysqli_stmt_init($conn);
+                            if (!mysqli_stmt_prepare($result, $sql)) {
+                                echo "SQL_Error_insert_An_available_card";
                                 exit();
                             }
                             else{
-                                $sql="UPDATE users SET CardID_select =? WHERE CardID=?";
-                                $result = mysqli_stmt_init($conn);
-                                if (!mysqli_stmt_prepare($result, $sql)) {
-                                    echo "SQL_Error_insert_An_available_card";
-                                    exit();
-                                }
-                                else{
-                                    $card_sel = 1;
-                                    mysqli_stmt_bind_param($result, "is", $card_sel, $Card);
-                                    mysqli_stmt_execute($result);
-                                    $resultl = mysqli_stmt_get_result($result);
-                                    if (!mysqli_stmt_prepare($result, $sql)){
-                                        echo "SQL_Error_insert_An_available_card2";
-                                        exit();
-                                    }
-                                    else{
-                                        echo "Cardavailable";
-                                        exit();
-                                    }
-                                }
+                                $card_sel = 1;
+                                mysqli_stmt_bind_param($result, "is", $card_sel, $Card);
+                                mysqli_stmt_execute($result);
+
+                                echo "Cardavailable1";
+                                exit();
                             }
                         }
                     }
@@ -175,15 +153,9 @@ if(!empty($_GET['CardID'])){
                             $card_sel = 1;
                             mysqli_stmt_bind_param($result, "is", $card_sel, $Card);
                             mysqli_stmt_execute($result);
-                            $resultl = mysqli_stmt_get_result($result);
-                            if (!mysqli_stmt_prepare($result, $sql)){
-                                echo "SQL_Error_insert_An_available_card2";
-                                exit();
-                            }
-                            else{
-                                echo "Cardavailable";
-                                exit();
-                            }
+
+                            echo "Cardavailable2";
+                            exit();
                         }
                     }
                 } 
@@ -204,6 +176,7 @@ if(!empty($_GET['CardID'])){
                 mysqli_stmt_execute($result);
                 $resultl = mysqli_stmt_get_result($result);
                 if ($row = mysqli_fetch_assoc($resultl)) {
+
                     $sql="UPDATE users SET CardID_select =?";
                     $result = mysqli_stmt_init($conn);
                     if (!mysqli_stmt_prepare($result, $sql)) {
@@ -214,32 +187,20 @@ if(!empty($_GET['CardID'])){
                         $card_sel = 0;
                         mysqli_stmt_bind_param($result, "i", $card_sel);
                         mysqli_stmt_execute($result);
-                        $resultl = mysqli_stmt_get_result($result);
-                        if (!mysqli_stmt_prepare($result, $sql)){
-                            echo "SQL_Error_insert";
+
+                        $sql = "INSERT INTO users (CardID, CardID_select) VALUES (?,?)";
+                        $result = mysqli_stmt_init($conn);
+                        if (!mysqli_stmt_prepare($result, $sql)) {
+                            echo "SQL_Error_Select_add";
                             exit();
                         }
                         else{
-                            $sql = "INSERT INTO users (CardID, CardID_select) VALUES (?,?)";
-                            $result = mysqli_stmt_init($conn);
-                            if (!mysqli_stmt_prepare($result, $sql)) {
-                                echo "SQL_Error_Select_add";
-                                exit();
-                            }
-                            else{
-                                $card_sel = 1;
-                                mysqli_stmt_bind_param($result, "si", $Card, $card_sel);
-                                mysqli_stmt_execute($result);
-                                $resultl = mysqli_stmt_get_result($result);
-                                if (!mysqli_stmt_prepare($result, $sql)){
-                                    echo "SQL_Error_insert_add";
-                                    exit();
-                                }
-                                else{
-                                    echo "succesful";
-                                    exit();
-                                }
-                            }
+                            $card_sel = 1;
+                            mysqli_stmt_bind_param($result, "si", $Card, $card_sel);
+                            mysqli_stmt_execute($result);
+
+                            echo "succesful";
+                            exit();
                         }
                     }
                 }
@@ -254,15 +215,9 @@ if(!empty($_GET['CardID'])){
                         $card_sel = 1;
                         mysqli_stmt_bind_param($result, "si", $Card, $card_sel);
                         mysqli_stmt_execute($result);
-                        $resultl = mysqli_stmt_get_result($result);
-                        if (!mysqli_stmt_prepare($result, $sql)){
-                            echo "SQL_Error_insert_add";
-                            exit();
-                        }
-                        else{
-                            echo "succesful";
-                            exit();
-                        }
+
+                        echo "succesful";
+                        exit();
                     }
                 }
             } 
