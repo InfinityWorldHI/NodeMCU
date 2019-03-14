@@ -7,14 +7,13 @@ require 'connectDB.php';
 //**********************************************************************************************
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
-	if(isset($_POST['login']) && !empty($_SESSION['card'])) {
+	if(isset($_POST['login'])) {
 
-      $CardID = $_SESSION['card'];
       $Uname = $_POST['Uname'];
       $Number = $_POST['Number'];
       $gender= $_POST['gender'];
       //check if there any selected card
-      $sql = "SELECT * FROM users WHERE CardID_select=?";
+      $sql = "SELECT CardID FROM users WHERE CardID_select=?";
       $result = mysqli_stmt_init($conn);
       if (!mysqli_stmt_prepare($result, $sql)) {
           header("location: AddCard.php?error=SQL_Error");
@@ -39,14 +38,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                   $resultl = mysqli_stmt_get_result($result);
                   if (!$row = mysqli_fetch_assoc($resultl)) {
                       //Add the user into the database
-                      $sql = "UPDATE users SET username=?, SerialNumber=?, gender=? WHERE CardID=?";
+                      $sql = "UPDATE users SET username=?, SerialNumber=?, gender=? WHERE CardID_select=?";
                       $result = mysqli_stmt_init($conn);
                       if (!mysqli_stmt_prepare($result, $sql)) {
                           header("location: AddCard.php?error=SQL_Error");
                           exit();
                       }
                       else{
-                          mysqli_stmt_bind_param($result, "sdss", $Uname, $Number, $gender, $CardID);
+                          $card_sel = 1;
+                          mysqli_stmt_bind_param($result, "sdsi", $Uname, $Number, $gender, $card_sel);
                           mysqli_stmt_execute($result);
                           header("location: AddCard.php?success=registerd");
                           exit();
@@ -68,14 +68,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
   }
 //**********************************************************************************************  
 //**********************************************************************************************  
-  if (isset($_POST['update']) && !empty($_SESSION[ 'card' ])) {
+  if (isset($_POST['update'])) {
         
-      $CardID = $_SESSION['card'];
       $Uname = $_POST['Uname'];
       $Number = $_POST['Number'];
       $gender= $_POST['gender'];
       
-      $sql = "SELECT * FROM users WHERE CardID_select=?";
+      $sql = "SELECT CardID FROM users WHERE CardID_select=?";
       $result = mysqli_stmt_init($conn);
       if (!mysqli_stmt_prepare($result, $sql)) {
           header("location: AddCard.php?error=SQL_Error");
@@ -100,14 +99,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                   $resultl = mysqli_stmt_get_result($result);
                   if (!$row = mysqli_fetch_assoc($resultl)) {
                       //Add the user into the database
-                      $sql = "UPDATE users SET username=?, SerialNumber=?, gender=? WHERE CardID=?";
+                      $sql = "UPDATE users SET username=?, SerialNumber=?, gender=? WHERE CardID_select=?";
                       $result = mysqli_stmt_init($conn);
                       if (!mysqli_stmt_prepare($result, $sql)) {
                           header("location: AddCard.php?error=SQL_Error");
                           exit();
                       }
                       else{
-                          mysqli_stmt_bind_param($result, "sdss", $Uname, $Number, $gender, $CardID);
+                          mysqli_stmt_bind_param($result, "sdsi", $Uname, $Number, $gender, $card_sel);
                           mysqli_stmt_execute($result);
                           header("location: AddCard.php?success=Updated");
                           exit();
@@ -128,121 +127,135 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
   }
 //**********************************************************************************************  
 //**********************************************************************************************
-  if(isset($_POST['del']))  {
+    if(isset($_POST['del']))  {
 
-      $CardID = $_SESSION['card'];
+        
+        if (!empty($_POST['CardID'])) {
 
-      $sql = "SELECT * FROM users WHERE CardID_select=?";
-      $result = mysqli_stmt_init($conn);
-      if (!mysqli_stmt_prepare($result, $sql)) {
-          header("location: AddCard.php?error=SQL_Error");
-          exit();
-      }
-      else{
-          $card_sel = 1;
-          mysqli_stmt_bind_param($result, "i", $card_sel);
-          mysqli_stmt_execute($result);
-          $resultl = mysqli_stmt_get_result($result);
-          if ($row = mysqli_fetch_assoc($resultl)) {
-              $sql ="DELETE FROM users WHERE CardID=? AND CardID_select=?";
-              $result = mysqli_stmt_init($conn);
-              if ( !mysqli_stmt_prepare($result, $sql)){
-                  header("location: AddCard.php?error=sqlerror");
-                  exit();
-              }
-              else{
-                  mysqli_stmt_bind_param($result, "si", $CardID, $card_sel);
-                  mysqli_stmt_execute($result);
-                  header("location: AddCard.php?success=deleted");
-                  exit();
-              }
-          }
-          else{
-              header("location: AddCard.php?error=No_SelID");
-              exit();
-          }
-      }
-  }
+            $CardID = $_POST['CardID'];
+            $sql = "SELECT CardID FROM users WHERE CardID=?";
+            $result = mysqli_stmt_init($conn);
+            if (!mysqli_stmt_prepare($result, $sql)) {
+                header("location: AddCard.php?error=SQL_Error");
+                exit();
+            }
+            else{
+                mysqli_stmt_bind_param($result, "s", $CardID);
+                mysqli_stmt_execute($result);
+                $resultl = mysqli_stmt_get_result($result);
+                if ($row = mysqli_fetch_assoc($resultl)) {
+
+                    $sql ="DELETE FROM users WHERE CardID=?";
+                    $result = mysqli_stmt_init($conn);
+                    if ( !mysqli_stmt_prepare($result, $sql)){
+                        header("location: AddCard.php?error=sqlerror");
+                        exit();
+                    }
+                    else{
+                        mysqli_stmt_bind_param($result, "s", $CardID);
+                        mysqli_stmt_execute($result);
+                        header("location: AddCard.php?success=deleted");
+                        exit();
+                    }
+                }
+                else{
+                    header("location: AddCard.php?error=No_ExID");
+                    exit();
+                }
+            }
+        }
+        else{
+            header("location: AddCard.php?error=No_SelID");
+            exit();
+        }
+    }
 //**********************************************************************************************
 //**********************************************************************************************
-  if(isset($_POST['set'])) {
+    if(isset($_POST['set'])) {
 
-      $CardID = $_POST['CardID'];
+        if (!empty($_POST['CardID'])) {
+          
+            $CardID = $_POST['CardID'];
 
-      $sql = "SELECT CardID FROM users WHERE CardID=?";
-      $result = mysqli_stmt_init($conn);
-      if (!mysqli_stmt_prepare($result, $sql)) {
-          header("location: AddCard.php?error=SQL_Error");
-          exit();
-      }
-      else{
-          mysqli_stmt_bind_param($result, "s", $CardID);
-          mysqli_stmt_execute($result);
-          $resultl = mysqli_stmt_get_result($result);
-          if ($row = mysqli_fetch_assoc($resultl)) {
+            $sql = "SELECT CardID FROM users WHERE CardID=?";
+            $result = mysqli_stmt_init($conn);
+            if (!mysqli_stmt_prepare($result, $sql)) {
+                header("location: AddCard.php?error=SQL_Error");
+                exit();
+            }
+            else{
+                mysqli_stmt_bind_param($result, "s", $CardID);
+                mysqli_stmt_execute($result);
+                $resultl = mysqli_stmt_get_result($result);
+                if ($row = mysqli_fetch_assoc($resultl)) {
 
-              $sql = "SELECT CardID_select FROM users WHERE CardID_select=?";
-              $result = mysqli_stmt_init($conn);
-              if (!mysqli_stmt_prepare($result, $sql)) {
-                  header("location: AddCard.php?error=SQL_Error");
-                  exit();
-              }
-              else{
-                  $card_sel = 1;
-                  mysqli_stmt_bind_param($result, "i", $card_sel);
-                  mysqli_stmt_execute($result);
-                  $resultl = mysqli_stmt_get_result($result);
-                  if ($row = mysqli_fetch_assoc($resultl)) {
+                    $sql = "SELECT CardID_select FROM users WHERE CardID_select=?";
+                    $result = mysqli_stmt_init($conn);
+                    if (!mysqli_stmt_prepare($result, $sql)) {
+                        header("location: AddCard.php?error=SQL_Error");
+                        exit();
+                    }
+                    else{
+                        $card_sel = 1;
+                        mysqli_stmt_bind_param($result, "i", $card_sel);
+                        mysqli_stmt_execute($result);
+                        $resultl = mysqli_stmt_get_result($result);
+                        if ($row = mysqli_fetch_assoc($resultl)) {
 
-                      $sql = "UPDATE users SET CardID_select=?";
-                      $result = mysqli_stmt_init($conn);
-                      if (!mysqli_stmt_prepare($result, $sql)) {
-                          header("location: AddCard.php?error=SQL_Error");
-                          exit();
-                      }
-                      else{
-                          $card_sel = 0;
-                          mysqli_stmt_bind_param($result, "i", $card_sel);
-                          mysqli_stmt_execute($result);
+                            $sql = "UPDATE users SET CardID_select=?";
+                            $result = mysqli_stmt_init($conn);
+                            if (!mysqli_stmt_prepare($result, $sql)) {
+                                header("location: AddCard.php?error=SQL_Error");
+                                exit();
+                            }
+                            else{
+                                $card_sel = 0;
+                                mysqli_stmt_bind_param($result, "i", $card_sel);
+                                mysqli_stmt_execute($result);
 
-                          $sql = "UPDATE users SET CardID_select=? WHERE CardID=?";
-                          $result = mysqli_stmt_init($conn);
-                          if (!mysqli_stmt_prepare($result, $sql)) {
-                              header("location: AddCard.php?error=SQL_Error");
-                              exit();
-                          }
-                          else{
-                              $card_sel = 1;
-                              mysqli_stmt_bind_param($result, "is", $card_sel, $CardID);
-                              mysqli_stmt_execute($result);
-                              header("location: AddCard.php?success=Selected");
-                              exit();
-                          }
-                      }
-                  }
-                  else{
-                      $sql = "UPDATE users SET CardID_select=? WHERE CardID=?";
-                      $result = mysqli_stmt_init($conn);
-                      if (!mysqli_stmt_prepare($result, $sql)) {
-                          header("location: AddCard.php?error=SQL_Error");
-                          exit();
-                      }
-                      else{
-                          $card_sel = 1;
-                          mysqli_stmt_bind_param($result, "is", $card_sel, $CardID);
-                          mysqli_stmt_execute($result);
-                          header("location: AddCard.php?success=Selected");
-                          exit();
-                      }
-                  }
-              }    
-          }
-          else{
-              header("location: AddCard.php?error=No_ExID");
-              exit();
-          }
-      }
-  }
+                                $sql = "UPDATE users SET CardID_select=? WHERE CardID=?";
+                                $result = mysqli_stmt_init($conn);
+                                if (!mysqli_stmt_prepare($result, $sql)) {
+                                    header("location: AddCard.php?error=SQL_Error");
+                                    exit();
+                                }
+                                else{
+                                    $card_sel = 1;
+                                    mysqli_stmt_bind_param($result, "is", $card_sel, $CardID);
+                                    mysqli_stmt_execute($result);
+                                    header("location: AddCard.php?success=Selected");
+                                    exit();
+                                }
+                            }
+                        }
+                        else{
+                            $sql = "UPDATE users SET CardID_select=? WHERE CardID=?";
+                            $result = mysqli_stmt_init($conn);
+                            if (!mysqli_stmt_prepare($result, $sql)) {
+                                header("location: AddCard.php?error=SQL_Error");
+                                exit();
+                            }
+                            else{
+                                $card_sel = 1;
+                                mysqli_stmt_bind_param($result, "is", $card_sel, $CardID);
+                                mysqli_stmt_execute($result);
+                                header("location: AddCard.php?success=Selected");
+                                exit();
+                            }
+                        }
+                    }    
+                }
+                else{
+                    header("location: AddCard.php?error=No_ExID");
+                    exit();
+                }
+            }
+        }
+        else{
+            header("location: AddCard.php?error=No_SelID");
+            exit();
+        }
+    }
 }
 //**********************************************************************************************
 ?>

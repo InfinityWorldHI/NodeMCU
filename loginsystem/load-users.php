@@ -10,10 +10,13 @@
     <TH>User Status</TH>
 </TR>
 <?php
+session_start();
 //Connect to database
-require('connectDB.php');
+require'connectDB.php';
 
-$sql = "SELECT * FROM logs WHERE DateLog=CURDATE() ORDER BY id DESC";
+$seldate = $_SESSION["exportdata"];
+
+$sql = "SELECT * FROM logs WHERE DateLog='$seldate' ORDER BY id DESC";
 $result=mysqli_query($conn,$sql);
 
 if (mysqli_num_rows($result) > 0)

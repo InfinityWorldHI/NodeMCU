@@ -7,8 +7,6 @@
     <TH>CardID</TH>
   </TR>
 <?php 
-
-session_start();
 //Connect to database
 require('connectDB.php');
 
@@ -27,7 +25,6 @@ if (mysqli_num_rows($result) > 0)
       <TD><?php echo $row['CardID'];
           if ($row['CardID_select'] == 1) {
               echo '<img src="image/che.png" style="margin-right: 60%; float: right;" width="20" height="20" title="The selected Card">';
-              $_SESSION['card'] = $row['CardID'];
           }
           else{
               echo '';

@@ -82,7 +82,7 @@ if(!empty($_GET['CardID'])){
                         elseif ($t >= $Timeleft && $row['TimeIn'] > $TimeArrive) {
                             $UserStat = "Arrived late and Left on time";
                         }
-                        $sql="UPDATE logs SET TimeOut=CURTIME(), UserStat =? WHERE CardNumber=? AND DateLog=CURDATE()";
+                        $sql="UPDATE logs SET TimeOut=CURTIME(), UserStat=? WHERE CardNumber=? AND DateLog=CURDATE()";
                         $result = mysqli_stmt_init($conn);
                         if (!mysqli_stmt_prepare($result, $sql)) {
                             echo "SQL_Error_insert_logout1";

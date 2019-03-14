@@ -27,7 +27,7 @@ header .head h1 {font-family:aguafina-script;text-align: center;color:#ddd;}
 header .head img {float: left;}
 header a {float: right;text-decoration: none;font-family:cursive;font-size:25px;color:red;margin:-60px 0px 0px 20px;padding-right: 100px}
 a:hover {opacity: 0.8;cursor: pointer;}
-.bod {background-color:#ddd; opacity: 0.7;border-collapse: collapse;width:100%;height:220px;padding-bottom:20px}
+.bod {background-color:#ddd; opacity: 0.7;border-collapse: collapse;width:100%;height:270px;padding-bottom:20px}
 .opt {float: left;margin: 20px 80px 0px 20px;}
 .opt input {padding:4px 0px 2px 6px;margin:4px;border-radius:10px;background-color:#ddd; color: black;font-size:16px;border-color: black}
 .opt p {font-family:cursive;text-align: left;font-size:19px;color:#f2f2f2;}
@@ -58,89 +58,86 @@ a:hover {opacity: 0.8;cursor: pointer;}
   <header >
     <div class="head">
       <img src="image/rfid1.jpg" width="80" height="80">
-      <h1>RFID auto recorder<br>
-      Login System</h1>
+      <h1>RFID<br>
+      Attendance System</h1>
     </div>
-    <a href="view.php">Users Logs</a>
+    <a href="view.php">Attendance Log</a>
   </header>
-<form action="user_insert.php" method="POST" >
-  <div class="bod">
 
-  <div class="opt">
-	<table>
-		<tr>
-      <input type="hidden" name="sel_cardID" value="<?php echo $_SESSION['card']; ?>">
-		</tr>
-		<tr>
-			<td>Name :</td>
-			<td><input type="text" placeholder="User Name" name="Uname" required></td>
-		</tr>
-		<tr>
-			<td>Number :</td>
-			<td><input type="number" placeholder="Serial Number" name="Number"></td>
-		</tr>
-		<tr>
-			<td>Gender :</td>
-		    <td><input type="radio" name="gender" value="Female" required /><label >Female</label >
-      <input type="radio" name="gender" value="Male" required /><label>Male</label ></td>
-		</tr>
-		<tr>
-    	    <td><input type="submit" value="Add" name="login" id="lo"></td>
-          <td><input type="submit" value="Update" name="update" id="up"></td>
-   		 </tr>
-	</table>
- </div>
-</form>
+<div class="bod">
 
-<div class="car">
-  <?php 
-    if (isset($_GET['error'])) {
-      if ($_GET['error'] == "SQL_Error") {
-         echo '<label style="color:red">SQL Error!</label>'; 
-      }
-      else if ($_GET['error'] == "Nu_Exist") {
-         echo '<label style="color:red">The Number is already taken!</label>'; 
-      }
-      else if ($_GET['error'] == "No_SelID") {
-         echo '<label style="color:red">There is no selecting card!</label>'; 
-      }
-      else if ($_GET['error'] == "No_ExID") {
-         echo '<label style="color:red">This card does not exist!</label>'; 
-      }
-    }
-    else if (isset($_GET['success'])) {
-      if ($_GET['success'] == "registerd") {
-        echo '<label style="color:green;">The Card has been added</label><br><br>';
-      }
-      else if ($_GET['success'] == "Updated") {
-        echo '<label style="color:green;">The Card has been Updated</label><br><br>';
-      }
-      else if ($_GET['success'] == "deleted") {
-        echo '<label style="color:green;">The Card has been Deleted</label><br><br>';
-      }
-      else if ($_GET['success'] == "Selected") {
-        echo '<label style="color:green;">The Card has been selected</label><br><br>';
-      }
-    }
-    else if (!isset($_SESSION['card'])) {
-      $_SESSION['card'] = "";
-    }
-  ?> 
+    <div class="opt">
+        <form action="user_insert.php" method="POST" >
+        	<table>
+        		<tr>
+        			<td>Name :</td>
+        			<td><input type="text" placeholder="User Name" name="Uname" required></td>
+        		</tr>
+        		<tr>
+        			<td>Number :</td>
+        			<td><input type="number" placeholder="Serial Number" name="Number"></td>
+        		</tr>
+        		<tr>
+        			<td>Gender :</td>
+        		    <td><input type="radio" name="gender" value="Female" required /><label >Female</label >
+              <input type="radio" name="gender" value="Male" required /><label>Male</label ></td>
+        		</tr>
+        		<tr>
+            	    <td><input type="submit" value="Add" name="login" id="lo"></td>
+                  <td><input type="submit" value="Update" name="update" id="up"></td>
+           		 </tr>
+        	</table>
+        </form>
+
+      <div class="op">
+        <form method="POST" action="user_insert.php">
+          <label style="font-size:19px;">Options:</label>
+            <input type="text" name="CardID" placeholder="Card ID"><br>
+            <button type="submit" name="del" style="border:none;background: none;" title="Remove"><img src="image/del.png" width="25" ></button>
+            <button type="submit" name="set" style="border:none;background: none;" title="Select"><img src="image/set.png" width="30" ></button>
+        </form>  
+      </div>
+
+    </div>
+
+    <div class="car">
+      <?php 
+        if (isset($_GET['error'])) {
+          if ($_GET['error'] == "SQL_Error") {
+             echo '<label style="color:red">SQL Error!</label>'; 
+          }
+          else if ($_GET['error'] == "Nu_Exist") {
+             echo '<label style="color:red">The Number is already taken!</label>'; 
+          }
+          else if ($_GET['error'] == "No_SelID") {
+             echo '<label style="color:red">There is no selecting card!</label>'; 
+          }
+          else if ($_GET['error'] == "No_ExID") {
+             echo '<label style="color:red">This card does not exist!</label>'; 
+          }
+        }
+        else if (isset($_GET['success'])) {
+          if ($_GET['success'] == "registerd") {
+            echo '<label style="color:green;">The Card has been added</label>';
+          }
+          else if ($_GET['success'] == "Updated") {
+            echo '<label style="color:green;">The Card has been Updated</label>';
+          }
+          else if ($_GET['success'] == "deleted") {
+            echo '<label style="color:green;">The Card has been Deleted</label>';
+          }
+          else if ($_GET['success'] == "Selected") {
+            echo '<label style="color:green;">The Card has been selected</label>';
+          }
+        }
+      ?> 
+    </div>
+
 </div>
-<div class="op">
-  
-  <form method="POST" action="user_insert.php">
-    <label style="font-size:19px;">Options:</label>
-      <input type="text" name="CardID" placeholder="Card ID"><br>
-      <button type="submit" name="del" style="border:none;background: none;" title="Remove"><img src="image/del.png" width="25" ></button>
-      <button type="submit" name="set" style="border:none;background: none;" title="Select"><img src="image/set.png" width="30" ></button>
-  </form>  
-</div>
-</div>
-<img src="image/wi.png" style="float: right;width:200px;right:2%;top:100px;position: absolute;">
-<a href="https://www.youtube.com/ElectronicsTechHaIs"><img src="image/icon.png" style="float: right;right:8%;top:300px;position: absolute;"></a>
-<div id="User">
-  
-</div>
+<img src="image/wi.png" style="float: right;width:200px;right:2%;top:125px;position: absolute;">
+<a href="https://www.youtube.com/ElectronicsTechHaIs"><img src="image/icon.png" style="float: right;right:8%;top:325px;position: absolute;"></a>
+
+<div id="User"></div>
+
 </body>
 </html>

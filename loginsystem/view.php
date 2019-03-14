@@ -1,7 +1,7 @@
 <?php
 session_start();
     //Connect to database
-    require('connectDB.php');
+    require'connectDB.php';
 //**********************************************************************************************
     
     //Get current date and time
@@ -14,14 +14,13 @@ session_start();
     $Tleft = mktime(02,30,00);
     $Timeleft = date("H:i:sa", $Tleft);
 
-    if (!empty($_POST['seldate'])) 
-  {
-    $seldate = $_POST['date'];
-  }
-else
-  {
-    $seldate = $d;
-  }
+    if (!empty($_POST['seldate'])) {
+        $seldate = $_POST['date'];
+    }
+    else{
+        $seldate = $d;
+      }
+
     $_SESSION["exportdata"] = $seldate;
 ?>
 <!DOCTYPE html>
@@ -86,27 +85,28 @@ header .opt p {font-family:cursive;text-align: left;font-size:19px;color:#f2f2f2
 </style>
 </head>
 <body>
-	<header >
-		<div class="head">
-			<img src="image/rfid1.jpg" width="80" height="80">
-			<h1>RFID auto recorder<br>
-			Login System</h1>
-		</div>	        
-		<div class="opt">
-			<table border="0">
-				<tr>
-					<td><a href="AddCard.php">Add a new User
-                        <img src="image/add.png" style="margin:10px 20px -5px 10px" width="30" title="Add"></a></td>
-					<td><p>Select the date log:
-					<form method="POST" action="">
+<header >
+
+	<div class="head">
+		<img src="image/rfid1.jpg" width="80" height="80">
+		<h1>RFID<br>Attendance System</h1>
+	</div>	        
+
+	<div class="opt">
+		<table border="0">
+			<tr>
+				<td><a href="AddCard.php">Add a new User
+                      <img src="image/add.png" style="margin:10px 20px -5px 10px" width="30" title="Add"></a></td>
+				<td><p>Select the date log:
+				<form method="POST" action="">
 					<input type="date" name="date"><br>
 					<input type="submit" name="seldate" value="Select Date" id="inp">
-					</form>
-					</p></td>
-				</tr>
-			</table>
-		</div>
-	</header>
+				</form>
+				</p></td>
+			</tr>
+		</table>
+	</div>
+</header>
 <h2 style="margin-left: 15px;">
   Time to arrive :<?php echo $TimeArrive?><br>
   Time to leave :<?php echo $Timeleft?>
