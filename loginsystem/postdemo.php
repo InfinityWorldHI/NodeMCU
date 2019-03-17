@@ -164,6 +164,10 @@ if(!empty($_GET['CardID'])){
         //*****************************************************
         //New card has been added
         else{
+            $Uname = "";
+            $Number = "";
+            $gender= "";
+
             $sql = "SELECT CardID_select FROM users WHERE CardID_select=?";
             $result = mysqli_stmt_init($conn);
             if (!mysqli_stmt_prepare($result, $sql)) {
@@ -188,7 +192,7 @@ if(!empty($_GET['CardID'])){
                         mysqli_stmt_bind_param($result, "i", $card_sel);
                         mysqli_stmt_execute($result);
 
-                        $sql = "INSERT INTO users (CardID, CardID_select) VALUES (?,?)";
+                        $sql = "INSERT INTO users (username , SerialNumber, gender, CardID, CardID_select) VALUES (?, ?, ?, ?, ?)";
                         $result = mysqli_stmt_init($conn);
                         if (!mysqli_stmt_prepare($result, $sql)) {
                             echo "SQL_Error_Select_add";
@@ -196,16 +200,16 @@ if(!empty($_GET['CardID'])){
                         }
                         else{
                             $card_sel = 1;
-                            mysqli_stmt_bind_param($result, "si", $Card, $card_sel);
+                            mysqli_stmt_bind_param($result, "sdssi", $Uname, $Number, $gender, $Card, $card_sel);
                             mysqli_stmt_execute($result);
 
-                            echo "succesful";
+                            echo "successful";
                             exit();
                         }
                     }
                 }
                 else{
-                    $sql = "INSERT INTO users (CardID, CardID_select) VALUES (?,?)";
+                    $sql = "INSERT INTO users (username , SerialNumber, gender, CardID, CardID_select) VALUES (?, ?, ?, ?, ?)";
                     $result = mysqli_stmt_init($conn);
                     if (!mysqli_stmt_prepare($result, $sql)) {
                         echo "SQL_Error_Select_add";
@@ -213,10 +217,10 @@ if(!empty($_GET['CardID'])){
                     }
                     else{
                         $card_sel = 1;
-                        mysqli_stmt_bind_param($result, "si", $Card, $card_sel);
+                        mysqli_stmt_bind_param($result, "sdssi", $Uname, $Number, $gender, $Card, $card_sel);
                         mysqli_stmt_execute($result);
 
-                        echo "succesful";
+                        echo "successful";
                         exit();
                     }
                 }
