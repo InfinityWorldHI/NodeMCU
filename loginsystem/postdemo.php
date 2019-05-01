@@ -5,9 +5,9 @@
     //Get current date and time
     date_default_timezone_set('Asia/Damascus');
     $d = date("Y-m-d");
-    $t = date("h:i:s");
+    $t = date("H:i:sa");
 //**********************************************************************************************
-    $Tarrive = mktime(1,15,00);
+    $Tarrive = mktime(01,30,00);
     $TimeArrive = date("H:i:sa", $Tarrive);
 //**********************************************************************************************   
     $Tleft = mktime(02,30,00);
@@ -69,7 +69,8 @@ if(!empty($_GET['CardID'])){
                     }
                     //*****************************************************
                     //Logout
-                    else if ($row = mysqli_fetch_assoc($resultl)) {
+                    else {
+                        
                         if ($t >= $Timeleft && $row['TimeIn'] <= $TimeArrive) {
                             $UserStat = "Arrived and Left on time";
                         }
@@ -203,7 +204,7 @@ if(!empty($_GET['CardID'])){
                             mysqli_stmt_bind_param($result, "sdssi", $Uname, $Number, $gender, $Card, $card_sel);
                             mysqli_stmt_execute($result);
 
-                            echo "successful";
+                            echo "succesful1";
                             exit();
                         }
                     }
@@ -220,7 +221,7 @@ if(!empty($_GET['CardID'])){
                         mysqli_stmt_bind_param($result, "sdssi", $Uname, $Number, $gender, $Card, $card_sel);
                         mysqli_stmt_execute($result);
 
-                        echo "successful";
+                        echo "succesful2";
                         exit();
                     }
                 }
