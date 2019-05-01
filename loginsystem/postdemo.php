@@ -69,7 +69,7 @@ if(!empty($_GET['CardID'])){
                     }
                     //*****************************************************
                     //Logout
-                    else{
+                    else if ($row = mysqli_fetch_assoc($resultl)) {
                         if ($t >= $Timeleft && $row['TimeIn'] <= $TimeArrive) {
                             $UserStat = "Arrived and Left on time";
                         }
