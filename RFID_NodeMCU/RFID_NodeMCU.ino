@@ -123,15 +123,6 @@ void loop() {
     digitalWrite(RedLed,HIGH);
     delay(500);  
   }
-  else if(payload == "NotAllow"){
-    for(int j=0; j<5; j++){
-    digitalWrite(BlueLed,HIGH);
-    digitalWrite(RedLed,HIGH);
-    delay(200);
-    digitalWrite(BlueLed,LOW);
-    digitalWrite(RedLed,LOW);
-    }
-  }
   delay(500);
   
   CardID = "";
