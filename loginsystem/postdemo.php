@@ -13,7 +13,12 @@
     $Tleft = mktime(02,30,00);
     $Timeleft = date("H:i:sa", $Tleft);
 //**********************************************************************************************
-    
+
+if($_GET['test'] == "test"){
+    echo "The Website is online";
+    exit();
+}
+
 if(!empty($_GET['CardID'])){
 
     $Card = $_GET['CardID'];
@@ -63,7 +68,7 @@ if(!empty($_GET['CardID'])){
                             mysqli_stmt_bind_param($result, "ssds", $Card, $Uname, $Number, $UserStat);
                             mysqli_stmt_execute($result);
 
-                            echo "login";
+                            echo "login".$Uname;
                             exit();
                         }
                     }
@@ -93,7 +98,7 @@ if(!empty($_GET['CardID'])){
                             mysqli_stmt_bind_param($result, "sd", $UserStat, $Card);
                             mysqli_stmt_execute($result);
 
-                            echo "logout";
+                            echo "logout".$Uname;
                             exit();
                         }
                     }
@@ -138,7 +143,7 @@ if(!empty($_GET['CardID'])){
                                 mysqli_stmt_bind_param($result, "is", $card_sel, $Card);
                                 mysqli_stmt_execute($result);
 
-                                echo "Cardavailable1";
+                                echo "Cardavailable";
                                 exit();
                             }
                         }
@@ -155,7 +160,7 @@ if(!empty($_GET['CardID'])){
                             mysqli_stmt_bind_param($result, "is", $card_sel, $Card);
                             mysqli_stmt_execute($result);
 
-                            echo "Cardavailable2";
+                            echo "Cardavailable";
                             exit();
                         }
                     }
@@ -204,7 +209,7 @@ if(!empty($_GET['CardID'])){
                             mysqli_stmt_bind_param($result, "sdssi", $Uname, $Number, $gender, $Card, $card_sel);
                             mysqli_stmt_execute($result);
 
-                            echo "succesful1";
+                            echo "succesful";
                             exit();
                         }
                     }
@@ -221,7 +226,7 @@ if(!empty($_GET['CardID'])){
                         mysqli_stmt_bind_param($result, "sdssi", $Uname, $Number, $gender, $Card, $card_sel);
                         mysqli_stmt_execute($result);
 
-                        echo "succesful2";
+                        echo "succesful";
                         exit();
                     }
                 }
@@ -232,7 +237,9 @@ if(!empty($_GET['CardID'])){
 //***************************************************** 
 //Empty Card ID
 else{
-	echo "Empty_Card_ID";
+    echo "Empty_Card_ID";
     exit();
 }
+mysqli_stmt_close($result);
+mysqli_close($conn);
 ?>
