@@ -14,9 +14,11 @@
     $Timeleft = date("H:i:sa", $Tleft);
 //**********************************************************************************************
 
-if($_GET['test'] == "test"){
-    echo "The Website is online";
-    exit();
+if(!empty($_GET['test'])){
+    if($_GET['test'] == "test"){
+        echo "The Website is online";
+        exit();
+    }
 }
 
 if(!empty($_GET['CardID'])){
