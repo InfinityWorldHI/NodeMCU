@@ -70,7 +70,7 @@ if(!empty($_GET['CardID'])){
                             mysqli_stmt_bind_param($result, "ssds", $Card, $Uname, $Number, $UserStat);
                             mysqli_stmt_execute($result);
 
-                            echo "login".$Uname;
+                            echo "login";
                             exit();
                         }
                     }
@@ -100,7 +100,7 @@ if(!empty($_GET['CardID'])){
                             mysqli_stmt_bind_param($result, "sd", $UserStat, $Card);
                             mysqli_stmt_execute($result);
 
-                            echo "logout".$Uname;
+                            echo "logout";
                             exit();
                         }
                     }
